@@ -21,7 +21,7 @@ from PIL import Image
 
 # Get command line arguments
 parser = argparse.ArgumentParser(description='Train the network')
-parser.add_argument('data_directory', help='data_directory')
+parser.add_argument('data_directory', type=str, help='data_directory')
 parser.add_argument('--save_dir', '-s', type=str, dest='save_directory', help='Set directory to save checkpoints')
 parser.add_argument('--arch', type=str, dest='architecture', default='vgg11', help='Set the architecture, default vgg11')
 parser.add_argument('--learning_rate', type=float, dest='learning_rate', default=0.01, help='Set the learning rate, default 0.01')
@@ -31,9 +31,12 @@ parser.add_argument('--gpu', action="store_true", dest='gpu', default=True, help
 args = parser.parse_args()
 print(args)
 
-print("epochs", args.epochs)
+# print("epochs", args.epochs)
 
-
+# set the model to use
 model = "models." + args.architecture + "(pretrained=True)"
-
 print("Model is:", model)
+
+# set the data_dir
+data_dir = args.data_directory
+print("Data Directory is:", data_dir)
