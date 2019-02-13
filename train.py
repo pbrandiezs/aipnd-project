@@ -40,3 +40,13 @@ print("Model is:", model)
 # set the data_dir
 data_dir = args.data_directory
 print("Data Directory is:", data_dir)
+
+# set the train_dir, valid_dir, and test_dir
+train_dir = data_dir + '/train'
+valid_dir = data_dir + '/valid'
+test_dir = data_dir + '/test'
+print("train_dir:", train_dir)
+print("valid_dir:", valid_dir)
+print("test_dir:", test_dir)
+
+
