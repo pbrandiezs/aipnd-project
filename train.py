@@ -118,7 +118,7 @@ print_every = 40
 steps = 0
 
 # change to cuda
-model.to('cuda')
+# model.to('cuda')
 
 for e in range(epochs):
     running_loss = 0
