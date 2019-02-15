@@ -24,7 +24,7 @@ import json
 parser = argparse.ArgumentParser(description='Train the network')
 parser.add_argument('data_directory', type=str, help='data_directory')
 parser.add_argument('--save_dir', '-s', type=str, dest='save_directory', help='Set directory to save checkpoints')
-parser.add_argument('--arch', type=str, dest='architecture', default='vgg11', help='Set the architecture, default vgg11')
+parser.add_argument('--arch', type=str, dest='architecture', default='models.vgg11(pretrained=True)', help='Set the architecture, default models.vgg11(pretrained=True)'
 parser.add_argument('--learning_rate', type=float, dest='learning_rate', default=0.01, help='Set the learning rate, default 0.01')
 parser.add_argument('--hidden_units', type=int, dest='hidden_units', default=512, help='Set the hidden units, default 512')
 parser.add_argument('--epochs', type=int, dest='epochs', default=3, help='Set the number of epochs, default 3')
@@ -35,7 +35,8 @@ print(args)
 # print("epochs", args.epochs)
 
 # set the model to use
-model = "models." + args.architecture + "(pretrained=True)"
+# model = "models." + args.architecture + "(pretrained=True)"
+model = args.architecture
 print("Model is:", model)
 
 # set the data_dir
