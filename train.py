@@ -17,6 +17,7 @@ from torch import optim
 import torch.nn.functional as F
 from torchvision import datasets, transforms, models
 from PIL import Image
+import json
 
 
 # Get command line arguments
@@ -70,3 +71,22 @@ validation_transforms = transforms.Compose([transforms.Resize(256),
                                       transforms.Normalize([0.485, 0.456, 0.406], 
                                                            [0.229, 0.224, 0.225])])
                                                            
+data_transforms = {'train':train_transforms, 'test':test_transforms, 'validation':validation_transforms}
+
+# Load the datasets with ImageFolder
+train_data = datasets.ImageFolder(train_dir, transform=train_transforms)
+test_data = datasets.ImageFolder(test_dir, transform=test_transforms)
+validation_data = datasets.ImageFolder(valid_dir, transform=validation_transforms)
+
+image_datasets = {'train':train_data, 'test':test_data, 'validation':validation_data}
+
+# Using the image datasets and the trainforms, define the dataloaders
+trainloader = torch.utils.data.DataLoader(train_data, batch_size=64, shuffle=True)
+testloader = torch.utils.data.DataLoader(test_data, batch_size=32)
+validationloader = torch.utils.data.DataLoader(validation_data, batch_size=32)
+
+dataloaders = {'train':trainloader, 'test':testloader, 'validation':validationloader}
+
+# Get the names
+with open('cat_to_name.json', 'r') as f:
+    cat_to_name = json.load(f)
