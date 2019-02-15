@@ -90,3 +90,57 @@ dataloaders = {'train':trainloader, 'test':testloader, 'validation':validationlo
 # Get the names
 with open('cat_to_name.json', 'r') as f:
     cat_to_name = json.load(f)
+
+
+# Build and train your network
+print(model)
+
+# freeze
+for param in model.parameters():
+    param.requires_grad = False
+
+from collections import OrderedDict
+classifier = nn.Sequential(OrderedDict([
+                          ('fc1', nn.Linear(25088, 500)),
+                          ('relu', nn.ReLU()),
+                          ('dropout', nn.Dropout(0.2)),
+                          ('fc2', nn.Linear(500, 102)),
+                          ('output', nn.LogSoftmax(dim=1))
+                          ]))
+    
+model.classifier = classifier
+print(model)
+
+#Train
+criterion = nn.NLLLoss()
+optimizer = optim.Adam(model.classifier.parameters(), lr=0.001)
+epochs = 3
+print_every = 40
+steps = 0
+
+# change to cuda
+model.to('cuda')
+
+for e in range(epochs):
+    running_loss = 0
+    for ii, (inputs, labels) in enumerate(trainloader):
+        steps += 1
+        
+        inputs, labels = inputs.to('cuda'), labels.to('cuda')
+        
+        optimizer.zero_grad()
+        
+        # Forward and backward passes
+        outputs = model.forward(inputs)
+        loss = criterion(outputs, labels)
+        loss.backward()
+        optimizer.step()
+        
+        running_loss += loss.item()
+        
+        if steps % print_every == 0:
+            print("Epoch: {}/{}... ".format(e+1, epochs),
+                  "Loss: {:.4f}".format(running_loss/print_every))
+            
+            running_loss = 0
+
