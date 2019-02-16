@@ -125,7 +125,9 @@ for e in range(epochs):
     for ii, (inputs, labels) in enumerate(trainloader):
         steps += 1
         
-        inputs, labels = inputs.to('cuda'), labels.to('cuda')
+        #inputs, labels = inputs.to('cuda'), labels.to('cuda')
+        inputs, labels = inputs.to('cpu'), labels.to('cpu')
+
         
         optimizer.zero_grad()
         
