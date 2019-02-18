@@ -55,6 +55,7 @@ def load_checkpoint(filepath):
 #criterion = nn.NLLLoss()
 #optimizer = optim.Adam(model.classifier.parameters(), lr=0.001)
 
+model = load_checkpoint(checkpoint)
 
 # freeze
 for param in model.parameters():
@@ -72,6 +73,10 @@ classifier = nn.Sequential(OrderedDict([
 model.classifier = classifier
 optimizer = optim.Adam(model.classifier.parameters(), lr=0.001)
 
+<<<<<<< HEAD
 model = load_checkpoint('checkpoint.pth')
+=======
+# model = load_checkpoint(checkpoint)
+>>>>>>> 5b6b3eb... update .gitignore to ignore checkpoint.pth, changed model load to earlier in predict.py
 model.eval()
 
