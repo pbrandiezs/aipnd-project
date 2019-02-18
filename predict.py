@@ -224,15 +224,16 @@ flower_num = image.split('/')[2]
 np_image = np.array(im)
 
 
-fig = plt.figure(figsize = (6,10))
-plt.subplot(2,1,1)
-plt.imshow(np_image)
-plt.title(cat_to_name[flower_num])
+# fig = plt.figure(figsize = (6,10))
+# plt.subplot(2,1,1)
+#plt.imshow(np_image)
+#plt.title(cat_to_name[flower_num])
+print("Flower name:", cat_to_name[flower_num])
 
 #display the results
 # probabilities, labels, flowers = predict(image, model)
 probabilities, labels, classes = predict(image, model)
-plt.subplot(2,1,2)
+#plt.subplot(2,1,2)
 
-sns.barplot(x = probabilities, y = labels, color = sns.color_palette()[0])
-plt.show()
+#sns.barplot(x = probabilities, y = labels, color = sns.color_palette()[0])
+#plt.show()
