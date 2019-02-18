@@ -23,7 +23,7 @@ import json
 # Get command line arguments
 parser = argparse.ArgumentParser(description='Train the network')
 parser.add_argument('data_directory', type=str, help='data_directory')
-parser.add_argument('--save_dir', '-s', type=str, dest='save_directory', default='checkpoint', help='Set directory to save checkpoints')
+parser.add_argument('--save_dir', '-s', type=str, dest='save_directory', default='save', help='Set directory to save checkpoints')
 parser.add_argument('--arch', dest='architecture', default='vgg11', help='Set the architecture, default vgg11')
 parser.add_argument('--learning_rate', type=float, dest='learning_rate', default=0.01, help='Set the learning rate, default 0.01')
 parser.add_argument('--hidden_units', type=int, dest='hidden_units', default=512, help='Set the hidden units, default 512')
@@ -47,6 +47,8 @@ print("Data Directory is:", data_dir)
 # set the save_directory
 save_directory = args.save_directory
 print("Save Directory is:", save_directory)
+save_target = save_directory + "/checkpoint"
+print("Save Target is:", save_target)
 
 # set the learning rate
 learning_rate = args.learning_rate
@@ -216,6 +218,6 @@ checkpoint = {'epochs': epochs,
               'model_state_dict': model.state_dict(),
               'optimizer_state_dict': optimizer.state_dict(),
               }
-torch.save(checkpoint, save_directory)
+torch.save(checkpoint, save_target)
 
 print("Checkpoint saved..")
