@@ -7,7 +7,7 @@
 # Usage: predict.py -h
 #
 
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 import argparse
 import torch
 import numpy as np
@@ -17,7 +17,7 @@ import torch.nn.functional as F
 from torchvision import datasets, transforms, models
 from PIL import Image
 import json
-import seaborn as sns
+# import seaborn as sns
 
 
 
