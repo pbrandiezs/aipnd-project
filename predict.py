@@ -25,7 +25,7 @@ parser = argparse.ArgumentParser(description='Use a trained network to predict t
 parser.add_argument('input', type=str, help='Path to input image')
 parser.add_argument('checkpoint', type=str, help='Path to checkpoint save directory')
 parser.add_argument('--top_k', type=int, dest='top_k', default=3, help='top_k values to display, default 3')
-parser.add_argument('--gpu', action="store_true", dest='gpu', default=True, help='Use gpu for inference, default True')
+parser.add_argument('--gpu', action="store_true", dest='gpu', default=False, help='Use gpu for inference, default True')
 args = parser.parse_args()
 print(args)
 
@@ -39,11 +39,16 @@ print("Checkpoint location is", checkpoint)
 gpu = args.gpu
 print("GPU setting is:",gpu)
 
+# Define settings
+learning_rate=0.001
+hidden_units=512
 
 # Load previously saved checkpoint
 
 # Loads checkpoint and rebuilds the model
 def load_checkpoint(filepath):
+    if not gpu:
+        print("Not gpu")
     checkpoint = torch.load(filepath)
     model.load_state_dict(checkpoint['model_state_dict'])
     optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
@@ -63,20 +68,16 @@ for param in model.parameters():
 
 from collections import OrderedDict
 classifier = nn.Sequential(OrderedDict([
-                          ('fc1', nn.Linear(25088, 500)),
+                          ('fc1', nn.Linear(25088, hidden_units)),
                           ('relu', nn.ReLU()),
                           ('dropout', nn.Dropout(0.2)),
-                          ('fc2', nn.Linear(500, 102)),
+                          ('fc2', nn.Linear(hidden_units, 102)),
                           ('output', nn.LogSoftmax(dim=1))
                           ]))
     
 model.classifier = classifier
-optimizer = optim.Adam(model.classifier.parameters(), lr=0.001)
+optimizer = optim.Adam(model.classifier.parameters(), lr=learning_rate)
 
-<<<<<<< HEAD
-model = load_checkpoint('checkpoint.pth')
-=======
 # model = load_checkpoint(checkpoint)
->>>>>>> 5b6b3eb... update .gitignore to ignore checkpoint.pth, changed model load to earlier in predict.py
 model.eval()
 
