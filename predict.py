@@ -241,7 +241,7 @@ print("Flower name:", cat_to_name[flower_num])
 
 #display the results
 # probabilities, labels, flowers = predict(image, model)
-probabilities, labels, classes = predict(image, model)
+probabilities, labels, classes = predict(image, model, top_k)
 print("Top K results")
 print("labels:", labels)
 print("Probabilities", probabilities)
