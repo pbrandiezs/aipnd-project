@@ -238,6 +238,7 @@ np_image = np.array(im)
 # plt.subplot(2,1,1)
 #plt.imshow(np_image)
 #plt.title(cat_to_name[flower_num])
+print()
 print("Flower name:", cat_to_name[flower_num])
 
 #display the results
