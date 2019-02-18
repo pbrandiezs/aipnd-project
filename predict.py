@@ -211,11 +211,11 @@ def predict(image_path, model, topk=5):
 
 #test
 
-image_path = "flowers/test/1/image_06743.jpg"
-probs, labels, classes = predict(image_path, model, top_k)
-print(probs)
-print(labels)
-print(classes)
+# image_path = "flowers/test/1/image_06743.jpg"
+# probs, labels, classes = predict(image_path, model, top_k)
+# print(probs)
+#print(labels)
+#print(classes)
 
 
 
@@ -225,7 +225,8 @@ print(classes)
 # Display an image along with the top 5 classes
 
 #open the image
-image = "flowers/test/1/image_06743.jpg"
+#image = "flowers/test/1/image_06743.jpg"
+image = input_image
 im = Image.open(image)
 
 # display the image being worked on.
