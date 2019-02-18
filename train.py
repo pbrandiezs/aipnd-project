@@ -47,6 +47,10 @@ print("Data Directory is:", data_dir)
 save_directory = args.save_directory
 print("Save Directory is:", save_directory)
 
+# set the learning rate
+learning_rate = args.learning_rate
+print("Learning Rate is:", learning_rate)
+
 # set the train_dir, valid_dir, and test_dir
 train_dir = data_dir + '/train'
 valid_dir = data_dir + '/valid'
@@ -79,6 +83,7 @@ validation_transforms = transforms.Compose([transforms.Resize(256),
 data_transforms = {'train':train_transforms, 'test':test_transforms, 'validation':validation_transforms}
 
 # Load the datasets with ImageFolder
+
 train_data = datasets.ImageFolder(train_dir, transform=train_transforms)
 test_data = datasets.ImageFolder(test_dir, transform=test_transforms)
 validation_data = datasets.ImageFolder(valid_dir, transform=validation_transforms)
@@ -86,6 +91,7 @@ validation_data = datasets.ImageFolder(valid_dir, transform=validation_transform
 image_datasets = {'train':train_data, 'test':test_data, 'validation':validation_data}
 
 # Using the image datasets and the trainforms, define the dataloaders
+
 trainloader = torch.utils.data.DataLoader(train_data, batch_size=64, shuffle=True)
 testloader = torch.utils.data.DataLoader(test_data, batch_size=32)
 validationloader = torch.utils.data.DataLoader(validation_data, batch_size=32)
@@ -117,7 +123,8 @@ print(model)
 
 #Train
 criterion = nn.NLLLoss()
-optimizer = optim.Adam(model.classifier.parameters(), lr=0.001)
+#optimizer = optim.Adam(model.classifier.parameters(), lr=0.001)
+optimizer = optim.Adam(model.classifier.parameters(), lr=learning_rate)
 # epochs = 3
 print_every = 40
 steps = 0
