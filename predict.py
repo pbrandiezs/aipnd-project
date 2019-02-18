@@ -38,3 +38,40 @@ print("Checkpoint location is", checkpoint)
 
 gpu = args.gpu
 print("GPU setting is:",gpu)
+
+
+# Load previously saved checkpoint
+
+# Loads checkpoint and rebuilds the model
+def load_checkpoint(filepath):
+    checkpoint = torch.load(filepath)
+    model.load_state_dict(checkpoint['model_state_dict'])
+    optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
+    epochs = checkpoint['epochs']
+    loss = checkpoint['loss']
+    return model
+
+#model = models.vgg11(pretrained=True)
+#criterion = nn.NLLLoss()
+#optimizer = optim.Adam(model.classifier.parameters(), lr=0.001)
+
+
+# freeze
+for param in model.parameters():
+    param.requires_grad = False
+
+from collections import OrderedDict
+classifier = nn.Sequential(OrderedDict([
+                          ('fc1', nn.Linear(25088, 500)),
+                          ('relu', nn.ReLU()),
+                          ('dropout', nn.Dropout(0.2)),
+                          ('fc2', nn.Linear(500, 102)),
+                          ('output', nn.LogSoftmax(dim=1))
+                          ]))
+    
+model.classifier = classifier
+optimizer = optim.Adam(model.classifier.parameters(), lr=0.001)
+
+model = load_checkpoint('checkpoint.pth')
+model.eval()
+

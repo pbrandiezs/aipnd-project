@@ -47,7 +47,7 @@ print("Data Directory is:", data_dir)
 # set the save_directory
 save_directory = args.save_directory
 print("Save Directory is:", save_directory)
-save_target = save_directory + "/checkpoint"
+save_target = save_directory + "/checkpoint.pth"
 print("Save Target is:", save_target)
 
 # set the learning rate
