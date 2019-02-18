@@ -117,13 +117,12 @@ with open('cat_to_name.json', 'r') as f:
 for param in model.parameters():
     param.requires_grad = False
 
+# set the classifier
 from collections import OrderedDict
 classifier = nn.Sequential(OrderedDict([
-#                          ('fc1', nn.Linear(25088, 500)),
                           ('fc1', nn.Linear(25088, hidden_units)),
                           ('relu', nn.ReLU()),
                           ('dropout', nn.Dropout(0.2)),
-#                          ('fc2', nn.Linear(500, 102)),
                           ('fc2', nn.Linear(hidden_units, 102)),
                           ('output', nn.LogSoftmax(dim=1))
                           ]))
@@ -133,9 +132,7 @@ print(model)
 
 #Train
 criterion = nn.NLLLoss()
-#optimizer = optim.Adam(model.classifier.parameters(), lr=0.001)
 optimizer = optim.Adam(model.classifier.parameters(), lr=learning_rate)
-# epochs = 3
 print_every = 40
 steps = 0
 
@@ -214,5 +211,4 @@ checkpoint = {'epochs': epochs,
               'model_state_dict': model.state_dict(),
               'optimizer_state_dict': optimizer.state_dict(),
               }
-# torch.save(checkpoint, 'checkpoint.pth')
 torch.save(checkpoint, save_directory)
