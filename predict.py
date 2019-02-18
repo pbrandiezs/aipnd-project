@@ -108,9 +108,9 @@ def process_image(image):
     np_image = np.array(im)
     
     # display the image being worked on.
-    flower_num = image.split('/')[2]
-    plt.imshow(np_image)
-    plt.title(cat_to_name[flower_num])
+    #flower_num = image.split('/')[2]
+    #plt.imshow(np_image)
+    #plt.title(cat_to_name[flower_num])
     
     # scale to between 0 and 1
     np_image = np_image / 255
@@ -135,8 +135,8 @@ process_image(input_image)
 
 
 def imshow(image, ax=None, title=None):
-    if ax is None:
-        fig, ax = plt.subplots()
+    #if ax is None:
+    #    fig, ax = plt.subplots()
     
     # PyTorch tensors assume the color channel is the first dimension
     # but matplotlib assumes is the third dimension
@@ -150,7 +150,7 @@ def imshow(image, ax=None, title=None):
     # Image needs to be clipped between 0 and 1 or it looks like noise when displayed
     image = np.clip(image, 0, 1)
     
-    ax.imshow(image)
+    # ax.imshow(image)
     
     return ax
 
