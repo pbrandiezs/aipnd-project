@@ -132,6 +132,7 @@ model.classifier = classifier
 print(model)
 
 #Train
+print("Training started..")
 criterion = nn.NLLLoss()
 optimizer = optim.Adam(model.classifier.parameters(), lr=learning_rate)
 print_every = 40
@@ -171,9 +172,11 @@ for e in range(epochs):
             
             running_loss = 0
 
+print("Training finished..")
 
 # Validation
 
+print("Validation started..")
 model.to('cpu')
 correct = 0
 total = 0
@@ -201,10 +204,11 @@ with torch.no_grad():
         correct += (predicted == labels).sum().item()
 
 print('Accuracy of the network on the test images: %d %%' % (100 * correct / total))
-
+print("Validation finished..")
 
 # Save the checkpoint
 
+print("Saving checkpoint..")
 model.class_to_idx = image_datasets['train'].class_to_idx
 
 checkpoint = {'epochs': epochs,
@@ -213,3 +217,5 @@ checkpoint = {'epochs': epochs,
               'optimizer_state_dict': optimizer.state_dict(),
               }
 torch.save(checkpoint, save_directory)
+
+print("Checkpoint saved..")
