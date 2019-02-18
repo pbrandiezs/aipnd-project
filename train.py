@@ -55,8 +55,9 @@ print("Learning Rate is:", learning_rate)
 hidden_units = args.hidden_units
 print("Hidden units are:", hidden_units)
 
-# set the gpu use (boolean)
+# set the gpu use (boolean), default True
 gpu = args.gpu
+print("GPU is:", gpu)
 
 # set the train_dir, valid_dir, and test_dir
 train_dir = data_dir + '/train'
