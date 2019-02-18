@@ -40,6 +40,9 @@ print("Checkpoint location is", checkpoint)
 gpu = args.gpu
 print("GPU setting is:",gpu)
 
+top_k = args.top_k
+print("top_k setting is:", top_k)
+
 # Define settings
 learning_rate=0.001
 hidden_units=512
@@ -49,7 +52,7 @@ with open('cat_to_name.json', 'r') as f:
     cat_to_name = json.load(f)
 
 
-    
+
 # Load previously saved checkpoint
 
 # Loads checkpoint and rebuilds the model
@@ -209,7 +212,7 @@ def predict(image_path, model, topk=5):
 #test
 
 image_path = "flowers/test/1/image_06743.jpg"
-probs, labels, classes = predict(image_path, model)
+probs, labels, classes = predict(image_path, model, top_k)
 print(probs)
 print(labels)
 print(classes)
@@ -219,7 +222,7 @@ print(classes)
 
 
 
-# TODO: Display an image along with the top 5 classes
+# Display an image along with the top 5 classes
 
 #open the image
 image = "flowers/test/1/image_06743.jpg"
@@ -239,6 +242,9 @@ print("Flower name:", cat_to_name[flower_num])
 #display the results
 # probabilities, labels, flowers = predict(image, model)
 probabilities, labels, classes = predict(image, model)
+print("Top K results")
+print("labels:", labels)
+print("Probabilities", probabilities)
 #plt.subplot(2,1,2)
 
 #sns.barplot(x = probabilities, y = labels, color = sns.color_palette()[0])
