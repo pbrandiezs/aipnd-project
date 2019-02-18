@@ -55,6 +55,9 @@ print("Learning Rate is:", learning_rate)
 hidden_units = args.hidden_units
 print("Hidden units are:", hidden_units)
 
+# set the gpu use (boolean)
+gpu = args.gpu
+
 # set the train_dir, valid_dir, and test_dir
 train_dir = data_dir + '/train'
 valid_dir = data_dir + '/valid'
@@ -136,15 +139,21 @@ print_every = 40
 steps = 0
 
 # change to cuda
-# model.to('cuda')
+if gpu:
+    model.to('cuda')
+else:
+    model.to('cpu')
+
 
 for e in range(epochs):
     running_loss = 0
     for ii, (inputs, labels) in enumerate(trainloader):
         steps += 1
         
-        #inputs, labels = inputs.to('cuda'), labels.to('cuda')
-        inputs, labels = inputs.to('cpu'), labels.to('cpu')
+        if gpu:
+            inputs, labels = inputs.to('cuda'), labels.to('cuda')
+        else:
+            inputs, labels = inputs.to('cpu'), labels.to('cpu')
 
         
         optimizer.zero_grad()
