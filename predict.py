@@ -44,6 +44,12 @@ print("GPU setting is:",gpu)
 learning_rate=0.001
 hidden_units=512
 
+# get the names
+with open('cat_to_name.json', 'r') as f:
+    cat_to_name = json.load(f)
+
+
+    
 # Load previously saved checkpoint
 
 # Loads checkpoint and rebuilds the model
