@@ -43,6 +43,10 @@ model = models.__dict__[args.architecture](pretrained=True)
 data_dir = args.data_directory
 print("Data Directory is:", data_dir)
 
+# set the save_directory
+save_directory = args.save_directory
+print("Save Directory is:", save_directory)
+
 # set the train_dir, valid_dir, and test_dir
 train_dir = data_dir + '/train'
 valid_dir = data_dir + '/valid'
@@ -187,5 +191,5 @@ checkpoint = {'epochs': epochs,
               'model_state_dict': model.state_dict(),
               'optimizer_state_dict': optimizer.state_dict(),
               }
-torch.save(checkpoint, 'checkpoint.pth')
-
+# torch.save(checkpoint, 'checkpoint.pth')
+torch.save(checkpoint, save_directory)
