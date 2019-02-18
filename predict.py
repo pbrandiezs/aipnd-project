@@ -33,7 +33,7 @@ print()
 input_image = args.input
 print("Input image is:", input_image)
 
-checkpoint = args.checkpoint + "/checkpoint"
+checkpoint = args.checkpoint + "/checkpoint.pth"
 print("Checkpoint location is", checkpoint)
 
 gpu = args.gpu
@@ -47,8 +47,8 @@ hidden_units=512
 
 # Loads checkpoint and rebuilds the model
 def load_checkpoint(filepath):
-    if not gpu:
-        print("Not gpu")
+#    if not gpu:
+#       print("Not gpu")
     checkpoint = torch.load(filepath)
     model.load_state_dict(checkpoint['model_state_dict'])
     optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
@@ -56,11 +56,10 @@ def load_checkpoint(filepath):
     loss = checkpoint['loss']
     return model
 
-#model = models.vgg11(pretrained=True)
+model = models.vgg11(pretrained=True)
 #criterion = nn.NLLLoss()
 #optimizer = optim.Adam(model.classifier.parameters(), lr=0.001)
 
-model = load_checkpoint(checkpoint)
 
 # freeze
 for param in model.parameters():
@@ -78,6 +77,7 @@ classifier = nn.Sequential(OrderedDict([
 model.classifier = classifier
 optimizer = optim.Adam(model.classifier.parameters(), lr=learning_rate)
 
-# model = load_checkpoint(checkpoint)
+model = load_checkpoint(checkpoint)
 model.eval()
 
+print(model)
