@@ -33,6 +33,7 @@ args = parser.parse_args()
 print(args)
 
 # print("epochs", args.epochs)
+epochs = args.epochs
 
 # set the model to use
 # model = "models." + args.architecture + "(pretrained=True)"
@@ -113,7 +114,7 @@ print(model)
 #Train
 criterion = nn.NLLLoss()
 optimizer = optim.Adam(model.classifier.parameters(), lr=0.001)
-epochs = 3
+# epochs = 3
 print_every = 40
 steps = 0
 
