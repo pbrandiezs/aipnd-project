@@ -27,6 +27,7 @@ parser.add_argument('input', type=str, help='Path to input image')
 parser.add_argument('checkpoint', type=str, help='Path to checkpoint save directory')
 parser.add_argument('--top_k', type=int, dest='top_k', default=3, help='top_k values to display, default 3')
 parser.add_argument('--gpu', action="store_true", dest='gpu', default=False, help='Use gpu for inference, default True')
+parser.add_argument('--arch', dest='architecture', default='vgg11', help='Set the architecture, default vgg11')
 args = parser.parse_args()
 print(args)
 
@@ -42,6 +43,13 @@ print("GPU setting is:",gpu)
 
 top_k = args.top_k
 print("top_k setting is:", top_k)
+
+# restrict model to vgg11 and vgg13
+allowed_models=['vgg11', 'vgg13']
+if model not in allowed_models:
+    print("Allowed models are vgg11 or vgg13")
+    exit(1)
+model = models.__dict__[args.architecture](pretrained=True)
 
 # Define settings
 learning_rate=0.001
@@ -64,7 +72,8 @@ def load_checkpoint(filepath):
     loss = checkpoint['loss']
     return model
 
-model = models.vgg11(pretrained=True)
+# Uncomment to overide model for testing
+# model = models.vgg11(pretrained=True)
 
 
 
