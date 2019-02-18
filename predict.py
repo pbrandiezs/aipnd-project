@@ -28,3 +28,13 @@ parser.add_argument('--top_k', type=int, dest='top_k', default=3, help='top_k va
 parser.add_argument('--gpu', action="store_true", dest='gpu', default=True, help='Use gpu for inference, default True')
 args = parser.parse_args()
 print(args)
+
+print()
+input_image = args.input
+print("Input image is:", input_image)
+
+checkpoint = args.checkpoint + "/checkpoint"
+print("Checkpoint location is", checkpoint)
+
+gpu = args.gpu
+print("GPU setting is:",gpu)
