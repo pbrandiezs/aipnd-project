@@ -23,7 +23,7 @@ import json
 # Get command line arguments
 parser = argparse.ArgumentParser(description='Train the network')
 parser.add_argument('data_directory', type=str, default='flowers', help='data_directory')
-parser.add_argument('--save_dir', '-s', type=str, dest='save_directory', help='Set directory to save checkpoints')
+parser.add_argument('--save_dir', '-s', type=str, dest='save_directory', default='checkpoint', help='Set directory to save checkpoints')
 parser.add_argument('--arch', dest='architecture', default='vgg11', help='Set the architecture, default vgg11')
 parser.add_argument('--learning_rate', type=float, dest='learning_rate', default=0.01, help='Set the learning rate, default 0.01')
 parser.add_argument('--hidden_units', type=int, dest='hidden_units', default=512, help='Set the hidden units, default 512')
