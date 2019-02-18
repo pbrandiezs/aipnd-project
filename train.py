@@ -32,7 +32,8 @@ parser.add_argument('--gpu', action="store_true", dest='gpu', default=True, help
 args = parser.parse_args()
 print(args)
 
-# print("epochs", args.epochs)
+print("")
+print("epochs", args.epochs)
 epochs = args.epochs
 
 # set the model to use
