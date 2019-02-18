@@ -145,3 +145,46 @@ for e in range(epochs):
             
             running_loss = 0
 
+
+# Validation
+
+model.to('cpu')
+correct = 0
+total = 0
+
+with torch.no_grad():
+    for data in validationloader:
+        images, labels = data
+        outputs = model(images)
+        _, predicted = torch.max(outputs.data, 1)
+        total += labels.size(0)
+        correct += (predicted == labels).sum().item()
+
+print('Accuracy of the network on the validation images: %d %%' % (100 * correct / total))
+
+# Test images
+
+correct = 0
+total = 0
+with torch.no_grad():
+    for data in testloader:
+        images, labels = data
+        outputs = model(images)
+        _, predicted = torch.max(outputs.data, 1)
+        total += labels.size(0)
+        correct += (predicted == labels).sum().item()
+
+print('Accuracy of the network on the test images: %d %%' % (100 * correct / total))
+
+
+# Save the checkpoint
+
+model.class_to_idx = image_datasets['train'].class_to_idx
+
+checkpoint = {'epochs': epochs,
+              'loss': loss,
+              'model_state_dict': model.state_dict(),
+              'optimizer_state_dict': optimizer.state_dict(),
+              }
+torch.save(checkpoint, 'checkpoint.pth')
+
