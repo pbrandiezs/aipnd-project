@@ -51,6 +51,10 @@ print("Save Directory is:", save_directory)
 learning_rate = args.learning_rate
 print("Learning Rate is:", learning_rate)
 
+# set the hidden units
+hidden_units = args.hidden_units
+print("Hidden units are:", hidden_units)
+
 # set the train_dir, valid_dir, and test_dir
 train_dir = data_dir + '/train'
 valid_dir = data_dir + '/valid'
@@ -111,10 +115,12 @@ for param in model.parameters():
 
 from collections import OrderedDict
 classifier = nn.Sequential(OrderedDict([
-                          ('fc1', nn.Linear(25088, 500)),
+#                          ('fc1', nn.Linear(25088, 500)),
+                          ('fc1', nn.Linear(25088, hidden_units)),
                           ('relu', nn.ReLU()),
                           ('dropout', nn.Dropout(0.2)),
-                          ('fc2', nn.Linear(500, 102)),
+#                          ('fc2', nn.Linear(500, 102)),
+                          ('fc2', nn.Linear(hidden_units, 102)),
                           ('output', nn.LogSoftmax(dim=1))
                           ]))
     
