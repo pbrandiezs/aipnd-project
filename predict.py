@@ -38,6 +38,7 @@ print("Checkpoint location is", checkpoint)
 
 gpu = args.gpu
 print("GPU setting is:",gpu)
+    
 
 top_k = args.top_k
 print("top_k setting is:", top_k)
@@ -100,7 +101,6 @@ model.eval()
 
 
 #Process the test image
-
 def process_image(image):
     ''' Scales, crops, and normalizes a PIL image for a PyTorch model,
         returns an Numpy array
@@ -160,7 +160,7 @@ def imshow(image, ax=None, title=None):
     return ax
 
 # test it out
-imshow(process_image("flowers/test/1/image_06743.jpg"))
+# imshow(process_image("flowers/test/1/image_06743.jpg"))
 
 
 def predict(image_path, model, topk=5):
@@ -171,10 +171,20 @@ def predict(image_path, model, topk=5):
     proc_image = process_image(image_path)
     
     img = torch.from_numpy(proc_image).type(torch.FloatTensor)
+    
+    if gpu:
+        model.to('cuda')
+        img = img.cuda()
+    else:
+        model.to('cpu')
+        
     img = img.unsqueeze(0)
     
     probs = torch.exp(model.forward(img))
     top_probs, top_labs = probs.topk(topk)
+    
+    top_probs = top_probs.to('cpu')
+    top_labs = top_labs.to('cpu')
     
     top_probs = top_probs.detach().numpy().tolist()[0]
     top_labs = top_labs.detach().numpy().tolist()[0]
