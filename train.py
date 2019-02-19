@@ -7,6 +7,8 @@
 #
 # Usage: train.py -h
 #
+# Example: python train.py --save_dir save --gpu flowers
+#
 
 
 import argparse
