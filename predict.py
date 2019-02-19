@@ -211,3 +211,6 @@ probabilities, labels, classes = predict(image, model, top_k)
 print("Top K results")
 print("labels:", labels)
 print("Probabilities", probabilities)
+
+for item in range(top_k):
+    print(labels[item], probabilities[item] * 100 %%)
