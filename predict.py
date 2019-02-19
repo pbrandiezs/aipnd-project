@@ -26,6 +26,8 @@ parser.add_argument('checkpoint', type=str, help='Path to checkpoint save direct
 parser.add_argument('--top_k', type=int, dest='top_k', default=3, help='top_k values to display, default 3')
 parser.add_argument('--gpu', action="store_true", dest='gpu', default=False, help='Use gpu for inference, default True')
 parser.add_argument('--arch', dest='architecture', default='vgg11', help='Set the architecture -vgg11 or vgg13 are valid choices, default vgg11')
+parser.add_argument('--learning_rate', type=float, dest='learning_rate', default=0.001, help='Set the learning rate, default 0.001')
+parser.add_argument('--hidden_units', type=int, dest='hidden_units', default=512, help='Set the hidden units, default 512')
 args = parser.parse_args()
 print(args)
 
@@ -51,8 +53,8 @@ if args.architecture not in allowed_models:
 model = models.__dict__[args.architecture](pretrained=True)
 
 # Define settings
-learning_rate=0.001
-hidden_units=512
+learning_rate = args.learning_rate
+hidden_units = args.hidden_units
 
 # get the names
 with open('cat_to_name.json', 'r') as f:
@@ -70,9 +72,6 @@ def load_checkpoint(filepath):
     epochs = checkpoint['epochs']
     loss = checkpoint['loss']
     return model
-
-# Uncomment to overide model for testing
-# model = models.vgg11(pretrained=True)
 
 
 
@@ -94,8 +93,6 @@ optimizer = optim.Adam(model.classifier.parameters(), lr=learning_rate)
 
 model = load_checkpoint(checkpoint)
 model.eval()
-
-# print(model)
 
 
 
