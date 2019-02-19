@@ -40,7 +40,7 @@ epochs = args.epochs
 # model = "models." + args.architecture + "(pretrained=True)"
 # restrict model to vgg11 and vgg13
 allowed_models=['vgg11', 'vgg13']
-if model not in allowed_models:
+if args.architecture not in allowed_models:
     print("Allowed models are vgg11 or vgg13")
     exit(1)
 model = models.__dict__[args.architecture](pretrained=True)
