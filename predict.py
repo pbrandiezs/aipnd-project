@@ -6,6 +6,8 @@
 #
 # Usage: predict.py -h
 #
+# Example: python predict.py --gpu flowers/test/1/image_06743.jpg save
+#
 
 import argparse
 import torch
