@@ -208,9 +208,9 @@ print("Flower name:", cat_to_name[flower_num])
 
 #display the results
 probabilities, labels, classes = predict(image, model, top_k)
+print()
 print("Top K results")
-print("labels:", labels)
-print("Probabilities", probabilities)
+print()
 
 for item in range(top_k):
-    print(labels[item], probabilities[item] * 100 %%)
+    print("Item:", item, "\tProbability: %.3f%%" % (probabilities[item] * 100), "\tFlower:", labels[item])
