@@ -20,6 +20,8 @@ import torch.nn.functional as F
 from torchvision import datasets, transforms, models
 from PIL import Image
 import json
+from collections import OrderedDict
+import torchvision
 
 
 # Get command line arguments
@@ -181,24 +183,24 @@ for e in range(epochs):
             
             running_loss = 0
 
+    with torch.no_grad():
+        for validation_data in validationloader:
+            validation_images, validation_labels = validation_data
+            if gpu:
+                validation_images = validation_images.to('cuda')
+                validation_labels = validation_labels.to('cuda')
+
+            validation_outputs = model(validation_images)
+            _, predicted = torch.max(validation_outputs.data, 1)
+            total += validation_labels.size(0)
+            correct += (predicted == validation_labels).sum().item()
+    print('Accuracy of the network on the validation images: %d %%' % (100 * correct / total))
+
+
 print("Training finished..")
 
-# Validation
 
-print("Validation started..")
-model.to('cpu')
-correct = 0
-total = 0
 
-with torch.no_grad():
-    for data in validationloader:
-        images, labels = data
-        outputs = model(images)
-        _, predicted = torch.max(outputs.data, 1)
-        total += labels.size(0)
-        correct += (predicted == labels).sum().item()
-
-print('Accuracy of the network on the validation images: %d %%' % (100 * correct / total))
 
 # Test images
 
@@ -207,6 +209,9 @@ total = 0
 with torch.no_grad():
     for data in testloader:
         images, labels = data
+        if gpu:
+            images = images.to('cuda')
+            labels = labels.to('cuda')
         outputs = model(images)
         _, predicted = torch.max(outputs.data, 1)
         total += labels.size(0)
@@ -218,13 +223,20 @@ print("Validation finished..")
 # Save the checkpoint
 
 print("Saving checkpoint..")
+
+model.cpu
 model.class_to_idx = image_datasets['train'].class_to_idx
 
 checkpoint = {'epochs': epochs,
               'loss': loss,
+              'learning_rate': learning_rate,
+              'architecture': arch,
               'model_state_dict': model.state_dict(),
-              'optimizer_state_dict': optimizer.state_dict(),
+              'optimizer': optimizer.state_dict(),
+              'model_classifier': classifier,
+              'class_to_idx': model.class_to_idx,
               }
-torch.save(checkpoint, save_target)
+torch.save(checkpoint, 'checkpoint.pth')
+
 
 print("Checkpoint saved..")
