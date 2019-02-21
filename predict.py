@@ -76,7 +76,10 @@ with open(mapping, 'r') as f:
 
 # Loads checkpoint and rebuilds the model
 def load_checkpoint(filepath):
-    checkpoint = torch.load(filepath)
+    if not gpu:
+        checkpoint = torch.load(filepath, map_location={'cuda:0': 'cpu'})
+    else:
+        checkpoint = torch.load(filepath)
     classifier = checkpoint['model_classifier']
     model = getattr(torchvision.models, checkpoint['architecture'])(pretrained=True)
     model.classifier = classifier
