@@ -70,6 +70,9 @@ print("Hidden units are:", hidden_units)
 # set the gpu use (boolean), default True
 gpu = args.gpu
 print("GPU is:", gpu)
+if not torch.cuda.is_available():
+    print"GPU not found -> setting gpu to False"
+    gpu = False
 
 # set the train_dir, valid_dir, and test_dir
 train_dir = data_dir + '/train'
