@@ -183,6 +183,9 @@ for e in range(epochs):
             
             running_loss = 0
 
+    # Do validation on the validation set
+    correct = 0
+    total = 0
     with torch.no_grad():
         for validation_data in validationloader:
             validation_images, validation_labels = validation_data
