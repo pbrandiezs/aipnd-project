@@ -251,4 +251,4 @@ print("Top K results")
 print()
 
 for item in range(top_k):
-    print("Item:", item, "\tProbability: %.3f%%" % (probabilities[item] * 100), "\tClasses:", classes[item], "\tFlower:", labels[item])
+    print("Item:", item, "\tProbability: %.3f%%" % (probabilities[item] * 100), "\tClass: ", classes[item], "\tFlower:", labels[item])
