@@ -187,21 +187,21 @@ for e in range(epochs):
             
             running_loss = 0
 
-    # Do validation on the validation set
-    correct = 0
-    total = 0
-    with torch.no_grad():
-        for validation_data in validationloader:
-            validation_images, validation_labels = validation_data
-            if gpu:
-                validation_images = validation_images.to('cuda')
-                validation_labels = validation_labels.to('cuda')
+            # Do validation on the validation set
+            correct = 0
+            total = 0
+            with torch.no_grad():
+                for validation_data in validationloader:
+                    validation_images, validation_labels = validation_data
+                    if gpu:
+                        validation_images = validation_images.to('cuda')
+                        validation_labels = validation_labels.to('cuda')
 
-            validation_outputs = model(validation_images)
-            _, predicted = torch.max(validation_outputs.data, 1)
-            total += validation_labels.size(0)
-            correct += (predicted == validation_labels).sum().item()
-    print('Accuracy of the network on the validation images: %d %%' % (100 * correct / total))
+                    validation_outputs = model(validation_images)
+                    _, predicted = torch.max(validation_outputs.data, 1)
+                    total += validation_labels.size(0)
+                    correct += (predicted == validation_labels).sum().item()
+            print('Accuracy of the network on the validation images: %d %%' % (100 * correct / total))
 
 
 print("Training finished..")
