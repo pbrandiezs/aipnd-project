@@ -243,7 +243,7 @@ checkpoint = {'epochs': epochs,
               'model_classifier': classifier,
               'class_to_idx': model.class_to_idx,
               }
-torch.save(checkpoint, 'checkpoint.pth')
+torch.save(checkpoint, save_target)
 
 
 print("Checkpoint saved..")
