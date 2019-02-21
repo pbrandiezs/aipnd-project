@@ -201,30 +201,30 @@ def predict(image_path, model, topk=5):
     img = img.unsqueeze(0)
     
     probs = torch.exp(model.forward(img))
-    top_probs, top_labs = probs.topk(topk)
+    top_probs, top_classes = probs.topk(topk)
     
     top_probs = top_probs.to('cpu')
-    top_labs = top_labs.to('cpu')
+    top_classes = top_classes.to('cpu')
     
     top_probs = top_probs.detach().numpy().tolist()[0]
-    top_labs = top_labs.detach().numpy().tolist()[0]
+    top_classes = top_classes.detach().numpy().tolist()[0]
     
     #index to classes
     name_to_cat = {val: key for key, val in
                    cat_to_name.items()}
     
     top_labels = []
-    top_flowers = []
-    top_labels = [cat_to_name[str(lab + 1)] for lab in top_labs]
-    # top_classes = [str(lab + 1) for lab in top_labs]
-    #    print("top_classes before", top_classes)
-    index_to_class = {val: key for key, val in model.class_to_idx.items()}
-    # print("index_to_class", index_to_class)
     
-    indexes = top_labs
-    top_classes = [index_to_class[each + 1] for each in indexes]
-    # print("top_classes after", top_classes)
- 
+    
+    for item in range(topk):
+        top_classes[item] += 1
+    top_labels = [cat_to_name[str(item)] for item in top_classes]
+    index_to_class = {val: key for key, val in model.class_to_idx.items()}
+    
+    # print("top_classes are:", top_classes)
+    # print("top_labels are:", top_labels)
+    
+
     return top_probs, top_labels, top_classes
 
 
@@ -251,4 +251,4 @@ print("Top K results")
 print()
 
 for item in range(top_k):
-    print("Item:", item, "\tProbability: %.3f%%" % (probabilities[item] * 100), "\tFlower:", labels[item])
+    print("Item:", item, "\tProbability: %.3f%%" % (probabilities[item] * 100), "\tClasses:", classes[item], "\tFlower:", labels[item])
