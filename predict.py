@@ -45,7 +45,7 @@ print("Checkpoint location is", checkpoint)
 gpu = args.gpu
 print("GPU setting is:",gpu)
 if not torch.cuda.is_available():
-    print"GPU not found -> setting gpu to False"
+    print("GPU not found -> setting gpu to False")
     gpu = False
     
 
