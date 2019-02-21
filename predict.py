@@ -18,7 +18,8 @@ import torch.nn.functional as F
 from torchvision import datasets, transforms, models
 from PIL import Image
 import json
-
+from collections import OrderedDict
+import torchvision
 
 
 # Get command line arguments
@@ -27,9 +28,10 @@ parser.add_argument('input', type=str, help='Path to input image')
 parser.add_argument('checkpoint', type=str, help='Path to checkpoint save directory')
 parser.add_argument('--top_k', type=int, dest='top_k', default=3, help='top_k values to display, default 3')
 parser.add_argument('--gpu', action="store_true", dest='gpu', default=False, help='Use gpu for inference, default True')
-parser.add_argument('--arch', dest='architecture', default='vgg11', help='Set the architecture -vgg11 or vgg13 are valid choices, default vgg11')
-parser.add_argument('--learning_rate', type=float, dest='learning_rate', default=0.001, help='Set the learning rate, default 0.001')
-parser.add_argument('--hidden_units', type=int, dest='hidden_units', default=512, help='Set the hidden units, default 512')
+parser.add_argument('--mapping', type=str, dest='mapping', default='cat_to_name.json', help='Path to json mapping file, default cat_to_name.json')
+# parser.add_argument('--arch', dest='architecture', default='vgg11', help='Set the architecture -vgg11 or vgg13 are valid choices, default vgg11')
+# parser.add_argument('--learning_rate', type=float, dest='learning_rate', default=0.001, help='Set the learning rate, default 0.001')
+# parser.add_argument('--hidden_units', type=int, dest='hidden_units', default=512, help='Set the hidden units, default 512')
 args = parser.parse_args()
 print(args)
 
@@ -47,19 +49,22 @@ print("GPU setting is:",gpu)
 top_k = args.top_k
 print("top_k setting is:", top_k)
 
+mapping = args.mapping
+print("JSON mapping file is:", mapping)
+
 # restrict model to vgg11 and vgg13
-allowed_models=['vgg11', 'vgg13']
-if args.architecture not in allowed_models:
-    print("Allowed models are vgg11 or vgg13")
-    exit(1)
-model = models.__dict__[args.architecture](pretrained=True)
+# allowed_models=['vgg11', 'vgg13']
+# if args.architecture not in allowed_models:
+#     print("Allowed models are vgg11 or vgg13")
+#     exit(1)
+# model = models.__dict__[args.architecture](pretrained=True)
 
 # Define settings
-learning_rate = args.learning_rate
-hidden_units = args.hidden_units
+# learning_rate = args.learning_rate
+# hidden_units = args.hidden_units
 
 # get the names
-with open('cat_to_name.json', 'r') as f:
+with open(mapping, 'r') as f:
     cat_to_name = json.load(f)
 
 
@@ -69,32 +74,30 @@ with open('cat_to_name.json', 'r') as f:
 # Loads checkpoint and rebuilds the model
 def load_checkpoint(filepath):
     checkpoint = torch.load(filepath)
+    classifier = checkpoint['model_classifier']
+    model = getattr(torchvision.models, checkpoint['architecture'])(pretrained=True)
+    model.classifier = classifier
     model.load_state_dict(checkpoint['model_state_dict'])
-    optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
-    epochs = checkpoint['epochs']
-    loss = checkpoint['loss']
+    model.class_to_idx = checkpoint['class_to_idx']
+    model.epochs = checkpoint['epochs']
+    model.loss = checkpoint['loss']
+    model.learning_rate = checkpoint['learning_rate']
+    model.arch = checkpoint['architecture']
+    # optimizer.load_state_dict(checkpoint['optimizer'])
     return model
 
 
+
+model = load_checkpoint(checkpoint)
+model.eval()
+# print(model)
 
 # freeze
 for param in model.parameters():
     param.requires_grad = False
 
-from collections import OrderedDict
-classifier = nn.Sequential(OrderedDict([
-                          ('fc1', nn.Linear(25088, hidden_units)),
-                          ('relu', nn.ReLU()),
-                          ('dropout', nn.Dropout(0.2)),
-                          ('fc2', nn.Linear(hidden_units, 102)),
-                          ('output', nn.LogSoftmax(dim=1))
-                          ]))
-    
-model.classifier = classifier
-optimizer = optim.Adam(model.classifier.parameters(), lr=learning_rate)
+# optimizer = optim.Adam(model.classifier.parameters(), lr=learning_rate)
 
-model = load_checkpoint(checkpoint)
-model.eval()
 
 
 
@@ -109,8 +112,19 @@ def process_image(image):
     im = Image.open(image)
 
     #resize the image
-    im = im.resize((255,255))
-    
+    # im = im.resize((255,255))
+    size = 256
+    width = im.width
+    height = im.height
+    # print("width", width)
+    # print("height", height)
+    shortest_side = min(width, height)
+    # print("shortest_side", shortest_side)
+    # print("size", size)
+    # print("width / shortest_side * size", width / shortest_side * size)
+    # print("height / shortest_side * size", height / shortest_side * size)
+    im = im.resize((int((width/shortest_side)*size), int((height/shortest_side)*size)))
+
     #crop the image
     left = 16
     right = 240
@@ -176,6 +190,7 @@ def predict(image_path, model, topk=5):
         img = img.cuda()
     else:
         model.to('cpu')
+        img = img.to('cpu')
         
     img = img.unsqueeze(0)
     
@@ -195,7 +210,15 @@ def predict(image_path, model, topk=5):
     top_labels = []
     top_flowers = []
     top_labels = [cat_to_name[str(lab + 1)] for lab in top_labs]
-    top_classes = [str(lab + 1) for lab in top_labs]
+    # top_classes = [str(lab + 1) for lab in top_labs]
+    #    print("top_classes before", top_classes)
+    index_to_class = {val: key for key, val in model.class_to_idx.items()}
+    # print("index_to_class", index_to_class)
+    
+    indexes = top_labs
+    top_classes = [index_to_class[each + 1] for each in indexes]
+    # print("top_classes after", top_classes)
+ 
     return top_probs, top_labels, top_classes
 
 
