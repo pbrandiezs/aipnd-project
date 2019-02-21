@@ -47,6 +47,7 @@ allowed_models=['vgg11', 'vgg13']
 if args.architecture not in allowed_models:
     print("Allowed models are vgg11 or vgg13")
     exit(1)
+arch = args.architecture
 model = models.__dict__[args.architecture](pretrained=True)
 
 # set the data_dir
